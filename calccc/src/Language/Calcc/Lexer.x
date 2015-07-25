@@ -10,7 +10,7 @@ import Language.Calcc.Lexer.Token
 
 $digit = 0-9
 $alpha = [_a-zA-Z]
-$ident = $alpha[$alpha $digits]*
+@ident = $alpha[$alpha $digit]*
 
 tokens :-
 
