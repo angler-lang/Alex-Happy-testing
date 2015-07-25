@@ -21,9 +21,9 @@ import Language.Calcc.Lexer.Token
 
 Expression :: { Int }
         : integer                       { $1 }
-        | '+' Expression Expression     { (+)  $2 $3 }
-        | '-' Expression Expression     { (-)  $2 $3 }
-        | '*' Expression Expression     { (*)  $2 $3 }
+        | '+' Expression Expression     { (+) $2 $3 }
+        | '-' Expression Expression     { (-) $2 $3 }
+        | '*' Expression Expression     { (*) $2 $3 }
         | '/' Expression Expression     {% if $3 == 0
                                                 then Left ZeroDivision
                                                 else return $ div $2 $3
