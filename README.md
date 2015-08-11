@@ -3,7 +3,7 @@ Toy calculators for testing Alex and Happy
 
 ## *Pure calculator*
 
-Prefix operations with integers. The possible operations are `+`, `-`, `*` and `/`, an end of line can be commented with `# comment`.
+**Prefix binary** operations with integers. The possible operations are `+`, `-`, `*` and `/`, an end of line can be commented with `# comment`.
 
 #### Example
 
@@ -25,7 +25,7 @@ Prefix operations with integers. The possible operations are `+`, `-`, `*` and `
 
 ## *Stateful calculator*
 
-Infix operations with integers and identifiers. The possible operations are `+`, `-`, `*` and `/`, parenthesis can be used `(` and `)`, an end of line can be commented with `# comment`.
+**Infix binary** operations with integers and identifiers. The possible operations are `+`, `-`, `*` and `/`, parenthesis can be used `(` and `)`, an end of line can be commented with `# comment`.
 
 To define a new identifier, use the syntax `let <identifier> = <expression>`.
 
