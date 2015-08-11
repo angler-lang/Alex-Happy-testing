@@ -26,7 +26,7 @@ tokens :-
         \/                      { const (Operator Divide) }
         \=                      { const Equal }
         let                     { const Let }
-        id                      { Identifier }
+        @ident                  { Identifier }
 
 {
 

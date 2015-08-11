@@ -1,14 +1,21 @@
 {
-module Language.Calcc.Parser (parse_it_johnny) where
+module Language.Calcc.Parser (SymbolTable, parse_it_johnny) where
 
 import Language.Calcc.Lexer.Token
 
+import Data.Map (Map, member, insert)
+import qualified Data.Map as Map (lookup)
+
+import Control.Monad.Trans.State (State, runState, modify, gets)
+import Control.Monad.Trans.Either (EitherT, left, runEitherT)
+import Control.Monad.Trans (lift)
+
 }
 
-%name parse_it_johnny
+%name parseInput
 %tokentype { Token }
-%monad { Either CalccError }
-%error { omg_it's_an_error_johnny }
+%monad { MonadOfJohnny }
+%error { omg_an_error_johnny }
 
 %token
         integer           { Number $$ }
@@ -27,26 +34,40 @@ import Language.Calcc.Lexer.Token
 
 %%
 
-Declaration :: { Interpreter }
-        : let identifier '=' Expression {}
+Command :: { Either Message Int }
+        : Declaration                   { Left $1 }
+        | Expression                    { Right $1 }
 
 Expression :: { Int }
         : integer                       { $1 }
+        | identifier                    {% lift (gets $ Map.lookup $1) >>=
+                                                maybe (left $ UndefinedIdentifier $1) return
+                                        }
         | '(' Expression ')'            { $2 }
-        | Expression '+' Expression     { (+)  $2 $3 }
-        | Expression '-' Expression     { (-)  $2 $3 }
-        | Expression '*' Expression     { (*)  $2 $3 }
+        | Expression '+' Expression     { (+)  $1 $3 }
+        | Expression '-' Expression     { (-)  $1 $3 }
+        | Expression '*' Expression     { (*)  $1 $3 }
         | Expression '/' Expression     {% if $3 == 0
-                                                then Left ZeroDivision
-                                                else return $ div $2 $3
+                                                then left ZeroDivision
+                                                else return $ div $1 $3
+                                        }
+
+Declaration :: { Message }
+        : let identifier '=' Expression {% do
+                                                existed <- lift $ gets (member $2)
+                                                lift $ modify (insert $2 $4)
+                                                return $ (if existed then Created else Modified) $2
                                         }
 
 {
 
-type InterpreterState = IS { values :: Map String Int
-                           , error  :: Maybe CalccError
-                           }
+type SymbolTable = Map String Int
 
-omg_it's_an_error_johnny _ = modify (st -> st {error = Just ParseError})
+type MonadOfJohnny = EitherT CalccError (State SymbolTable)
+
+omg_an_error_johnny :: [Token] -> MonadOfJohnny a
+omg_an_error_johnny _ = left ParseError
+
+parse_it_johnny st = flip runState st . runEitherT . parseInput
 
 }

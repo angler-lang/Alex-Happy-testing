@@ -4,7 +4,7 @@ module Main where
 import Language.Calcc.Lexer (scan_it_johnny)
 import Language.Calcc.Parser (parse_it_johnny)
 
-import Control.Monad (forM_, liftM, forever, unless, when)
+import Control.Monad (liftM, unless, when)
 
 import System.IO (stdin, stdout, hIsEOF, hGetLine, hFlush, openFile, Handle, IOMode(ReadMode))
 import System.Environment (getArgs)
