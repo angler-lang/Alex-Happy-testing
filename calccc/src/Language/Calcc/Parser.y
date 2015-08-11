@@ -56,7 +56,7 @@ Declaration :: { Message }
         : let identifier '=' Expression {% do
                                                 existed <- lift $ gets (member $2)
                                                 lift $ modify (insert $2 $4)
-                                                return $ (if existed then Created else Modified) $2
+                                                return $ (if existed then Modified else Created) $2
                                         }
 
 {
