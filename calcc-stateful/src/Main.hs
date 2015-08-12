@@ -26,7 +26,7 @@ console isStdin state h = do
         isEOF <- hIsEOF h
         unless isEOF $ do
                 (answer, state') <- liftM ((parse_it_johnny state) . scan_it_johnny) $ hGetLine h
-                putStrLn $ either message (either message show) answer
+                putStrLn $ either message show answer
                 console isStdin state' h
         where
                 message :: (Show a) => a -> String

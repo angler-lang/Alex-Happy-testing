@@ -34,9 +34,9 @@ import Control.Monad.Trans (lift)
 
 %%
 
-Command :: { Either Message Int }
-        : Declaration                   { Left $1 }
-        | Expression                    { Right $1 }
+Command :: { Output }
+        : Declaration                   { Message $1 }
+        | Expression                    { Integer $1 }
 
 Expression :: { Int }
         : integer                       { $1 }
@@ -52,7 +52,7 @@ Expression :: { Int }
                                                 else return $ div $1 $3
                                         }
 
-Declaration :: { Message }
+Declaration :: { IdentifierInfo }
         : let identifier '=' Expression {% do
                                                 existed <- lift $ gets (member $2)
                                                 lift $ modify (insert $2 $4)

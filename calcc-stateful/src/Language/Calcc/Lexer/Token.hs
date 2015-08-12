@@ -32,8 +32,14 @@ instance Show CalccError where
         show ZeroDivision              = "división entre cero"
         show (UndefinedIdentifier idn) = "identificador " ++ idn ++ " no existe"
 
-data Message = Created String | Modified String
+data IdentifierInfo = Created String | Modified String
 
-instance Show Message where
+instance Show IdentifierInfo where
         show (Created idn)  = idn ++ " creado"
         show (Modified idn) = idn ++ " modificado"
+
+data Output = Integer Int | Message IdentifierInfo
+
+instance Show Output where
+        show (Integer n) = show n
+        show (Message m) = "-- " ++ show m
